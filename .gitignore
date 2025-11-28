@@ -1,0 +1,28 @@
+# Build artifacts
+bin/
+obj/
+publish/
+
+# SQLite database
+*.db
+
+# Sensitive settings (production)
+appsettings.Production.json
+
+# User secrets
+**/secrets.json
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+

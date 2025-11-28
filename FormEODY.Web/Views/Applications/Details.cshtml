@@ -1,0 +1,12 @@
+@model FormEODY.DataAccess.Entities.Application
+
+<h2>Application Details</h2>
+
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Gender:</strong> @Model.Gender</p>
+<p><strong>Single:</strong> @(Model.Single ? "Yes" : "No")</p>
+<p><strong>Occupation:</strong> @Model.Occupation</p>
+<p><strong>Message:</strong> @Model.Message</p>
+
+<a asp-action="Index">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
