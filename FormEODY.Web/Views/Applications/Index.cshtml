@@ -1,69 +1,108 @@
-@model List<FormEODY.DataAccess.Entities.Application>
+@{
+    ViewData["Title"] = "Applications";
+}
 
 <h2>Applications</h2>
 
-<a asp-action="Create" style="margin-bottom:15px; display:inline-block;">
-    ➕ New Application
-</a>
+<div class="d-flex mb-3">
+    <a asp-action="Create" class="btn btn-primary me-2">
+        ➕ New Application
+    </a>
+    <a asp-controller="Occupations" asp-action="Index" class="btn btn-outline-secondary">
+        Manage Occupations
+    </a>
+</div>
 
 @if (TempData["Success"] != null)
 {
-    <div style="background-color:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border:1px solid #c3e6cb;">
-        @TempData["Success"]
-    </div>
+    <div class="alert alert-success">@TempData["Success"]</div>
 }
 
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
-    <thead style="background:#f2f2f2;">
-        <tr>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Single</th>
-            <th>Occupation</th>
-            <th>Message</th>
-            <th style="width:160px;">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (Model != null && Model.Count > 0)
-    {
-        foreach (var a in Model)
-        {
-            <tr>
-                <td>@a.Name</td>
-                <td>@a.Gender</td>
-                <td>@(a.Single ? "Yes" : "No")</td>
-                <td>@a.Occupation</td>
-                <td>@a.Message</td>
-                <td>
+<div id="applicationsGrid"></div>
 
-                    <!-- View -->
-                    <a asp-action="Details" asp-route-id="@a.Id">View</a> |
+@section Scripts {
+    <script>
+        $(function () {
+            const store = DevExpress.data.AspNet.createStore({
+                key: "id",
+                loadUrl: "/Applications/Data"
+            });
 
-                    <!-- Edit -->
-                    <a asp-action="Edit" asp-route-id="@a.Id">Edit</a> |
+            $("#applicationsGrid").dxDataGrid({
+                dataSource: store,
+                remoteOperations: true,
+                columnAutoWidth: true,
+                rowAlternationEnabled: true,
+                paging: { pageSize: 10 },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 50],
+                    showInfo: true
+                },
+                filterRow: { visible: true },
+                searchPanel: { visible: true },
+                columns: [
+                    { dataField: "name", caption: "Name" },
+                    {
+                        dataField: "gender",
+                        caption: "Gender",
+                        lookup: {
+                            dataSource: [
+                                { value: 0, text: "Male" },
+                                { value: 1, text: "Female" }
+                            ],
+                            valueExpr: "value",
+                            displayExpr: "text"
+                        },
+                        calculateDisplayValue: function (row) {
+                            return row.gender === 0 || row.gender === "Male" ? "Male" : "Female";
+                        }
+                    },
+                    {
+                        dataField: "single",
+                        caption: "Single",
+                        dataType: "boolean"
+                    },
+                    { dataField: "occupation", caption: "Occupation" },
+                    { dataField: "message", caption: "Message" },
+                    {
+                        caption: "Actions",
+                        width: 180,
+                        allowFiltering: false,
+                        allowSorting: false,
+                        cellTemplate: function (container, options) {
+                            const id = options.data.id;
+                            const view = $("<a>")
+                                .attr("href", `/Applications/Details/${id}`)
+                                .attr("title", "View")
+                                .html('<i class="dx-icon-search"></i>');
+                            const edit = $("<a>")
+                                .attr("href", `/Applications/Edit/${id}`)
+                                .attr("title", "Edit")
+                                .html('<i class="dx-icon-edit"></i>');
+                            const form = $("<form>")
+                                .attr("method", "post")
+                                .attr("action", "/Applications/Delete")
+                                .css("display", "inline");
+                            form.append($("<input>").attr("type", "hidden").attr("name", "id").val(id));
+                            const delBtn = $("<button>")
+                                .attr("type", "submit")
+                                .addClass("btn btn-link p-0")
+                                .attr("title", "Delete")
+                                .css({ color: "red", "margin-left": "6px" })
+                                .html('<i class="dx-icon-trash"></i>')
+                                .on("click", function (e) {
+                                    if (!confirm("Delete this application?")) {
+                                        e.preventDefault();
+                                    }
+                                });
+                            form.append(delBtn);
 
-                    <!-- Delete -->
-                    <form asp-action="Delete" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@a.Id" />
-                        <button type="submit"
-                                onclick="return confirm('Are you sure you want to delete this application?');"
-                                style="background:none; border:none; color:red; cursor:pointer;">
-                            Delete
-                        </button>
-                    </form>
-
-                </td>
-            </tr>
-        }
-    }
-    else
-    {
-        <tr>
-            <td colspan="5" style="text-align:center; color:gray;">
-                No applications found.
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                            container.append(view).append(" | ").append(edit).append(" | ").append(form);
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

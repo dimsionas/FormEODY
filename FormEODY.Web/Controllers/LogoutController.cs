@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Identity;
+using FormEODY.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormEODY.Web.Controllers;
 
 public class LogoutController : Controller
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public LogoutController(SignInManager<IdentityUser> signInManager)
+    public LogoutController(SignInManager<ApplicationUser> signInManager)
     {
         _signInManager = signInManager;
     }

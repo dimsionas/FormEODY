@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FormEODY.DataAccess.Entities;
 
 namespace FormEODY.DataAccess;
 
-public class AppDbContext : IdentityDbContext<IdentityUser>
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -13,4 +12,5 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
     }
 
     public DbSet<Application> Applications { get; set; } = default!;
+    public DbSet<Occupation> Occupations { get; set; } = default!;
 }

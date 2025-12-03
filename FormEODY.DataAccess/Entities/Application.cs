@@ -13,13 +13,20 @@ public class Application
     [Required(ErrorMessage = "Gender is required")]
     public Gender Gender { get; set; }
 
-    public string Occupation { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Occupation is required")]
+    public int OccupationId { get; set; }
+    public Occupation? Occupation { get; set; }
 
     public bool Single { get; set; }
 
     [Required(ErrorMessage = "Message is required")]
     [MaxLength(500, ErrorMessage = "Message must be less than 500 characters")]
     public string Message { get; set; } = string.Empty;
+
+    public string? CreatedBy { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string? UpdatedBy { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public enum Gender

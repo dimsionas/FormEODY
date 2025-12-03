@@ -25,4 +25,7 @@ logs/
 # OS files
 .DS_Store
 Thumbs.db
+SampleProject/
 
+node_modules/
+package-lock.json

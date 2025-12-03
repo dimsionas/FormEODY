@@ -1,54 +1,54 @@
-@model FormEODY.DataAccess.Entities.Application
+@model FormEODY.Web.Models.ApplicationViewModel
 @using FormEODY.DataAccess.Entities
 
 <h2>Edit Application</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" id="applicationForm">
     <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" />
-        <span asp-validation-for="Name" style="color:red"></span>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-semibold"></label>
+        <input asp-for="Name" class="form-control form-control-lg" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <div>
-        <label>Gender</label><br />
-        <label>
-            <input type="radio" asp-for="Gender" value="@Gender.Male" /> Male
-        </label>
-        <label>
-            <input type="radio" asp-for="Gender" value="@Gender.Female" /> Female
-        </label>
-        <br />
-        <span asp-validation-for="Gender" style="color:red"></span>
+    <div class="mb-3">
+        <label class="form-label fw-semibold">Gender</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="Male" id="genderMale" />
+            <label class="form-check-label" for="genderMale">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" asp-for="Gender" value="Female" id="genderFemale" />
+            <label class="form-check-label" for="genderFemale">Female</label>
+        </div>
+        <span asp-validation-for="Gender" class="text-danger"></span>
     </div>
 
-    <div>
-        <label>
-            <input asp-for="Single" type="checkbox" /> Single
-        </label>
+    <div class="form-check mb-3">
+        <input asp-for="Single" type="checkbox" class="form-check-input" id="SingleCheckbox" />
+        <label asp-for="Single" class="form-check-label"></label>
     </div>
 
     <div class="form-group mb-3">
-        <label asp-for="Occupation" class="form-label"></label>
-        <select asp-for="Occupation" class="form-control">
+        <label asp-for="OccupationId" class="form-label fw-semibold"></label>
+        <select asp-for="OccupationId" asp-items="ViewBag.Occupations" class="form-control form-control-lg" id="OccupationSelect">
             <option value="">-- Select Occupation --</option>
-            <option value="Doctor">Doctor</option>
-            <option value="Nurse">Nurse</option>
         </select>
-        <span asp-validation-for="Occupation" class="text-danger"></span>
+        <span asp-validation-for="OccupationId" class="text-danger"></span>
     </div>
 
-    <div>
-        <label asp-for="Message"></label><br />
-        <textarea asp-for="Message"></textarea>
-        <span asp-validation-for="Message" style="color:red"></span>
+    <div class="mb-3">
+        <label asp-for="Message" class="form-label fw-semibold"></label><br />
+        <textarea asp-for="Message" class="form-control form-control-lg" id="MessageArea" rows="5"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
     </div>
 
-    <button type="submit">Save</button>
+    <button type="submit" class="btn btn-success btn-lg px-4" id="SubmitBtn">Save</button>
 </form>
 
-<a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

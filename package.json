@@ -1,0 +1,25 @@
+{
+  "name": "formeody",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimsionas/FormEODY.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dimsionas/FormEODY/issues"
+  },
+  "homepage": "https://github.com/dimsionas/FormEODY#readme",
+  "dependencies": {
+    "devextreme": "^20.1.3",
+    "devextreme-aspnet-data": "^2.9.2"
+  }
+}

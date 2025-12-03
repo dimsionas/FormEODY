@@ -1,0 +1,33 @@
+@model IEnumerable<FormEODY.DataAccess.Entities.Occupation>
+
+<h2>Occupations</h2>
+
+<form asp-action="Create" method="post" class="mb-3 d-flex">
+    <input type="text" name="name" class="form-control me-2" placeholder="New occupation name" required />
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th style="width:120px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var occ in Model)
+        {
+            <tr>
+                <td>@occ.Name</td>
+                <td>
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@occ.Id" />
+                        <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('Delete this occupation?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using FormEODY.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using FormEODY.Web.Models;
 
@@ -6,9 +7,9 @@ namespace FormEODY.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AccountController(SignInManager<IdentityUser> signInManager)
+    public AccountController(SignInManager<ApplicationUser> signInManager)
     {
         _signInManager = signInManager;
     }

@@ -4,14 +4,23 @@ using FormEODY.Services.Interfaces;
 using FormEODY.Services.Implementations;
 using FormEODY.Web.Data;
 using Microsoft.AspNetCore.Identity;
+using FormEODY.Web.Mapping;
+using FormEODY.DataAccess.Entities;
+using Serilog;
+using Sentry;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Logging: Serilog + Sentry from configuration
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+builder.WebHost.UseSentry();
 
 // Services
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
@@ -19,9 +28,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
+builder.Services.AddScoped<IOccupationService, OccupationService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 // Cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
@@ -31,7 +42,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ReturnUrlParameter = "returnUrl";
 });
 
+
 var app = builder.Build();
+
+SentrySdk.CaptureMessage("Hello Sentry (startup test)");
 
 // Seed roles & users
 using (var scope = app.Services.CreateScope())
@@ -40,7 +54,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
     await IdentitySeed.InitializeAsync(
-        services.GetRequiredService<UserManager<IdentityUser>>(),
+        services.GetRequiredService<UserManager<ApplicationUser>>(),
         services.GetRequiredService<RoleManager<IdentityRole>>()
     );
 }

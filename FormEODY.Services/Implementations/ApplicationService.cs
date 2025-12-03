@@ -23,12 +23,17 @@ public class ApplicationService : IApplicationService
 
     public async Task<List<Application>> GetAllAsync()
     {
-        return await _context.Applications.ToListAsync();
+        return await _context.Applications.Include(o => o.Occupation).ToListAsync();
+    }
+
+    public IQueryable<Application> Query()
+    {
+        return _context.Applications.AsNoTracking().Include(o => o.Occupation);
     }
 
     public async Task<Application?> GetByIdAsync(int id)
     {
-        return await _context.Applications.FindAsync(id);
+        return await _context.Applications.Include(o => o.Occupation).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task UpdateAsync(Application application)
